@@ -27,15 +27,10 @@ var http = (function (self){
 
   function fn(){};
   var http = {
-    get : function (){
-
-    },
-    post : function (){
-
-    },
     request : function (object, callback){
 
       var requiredFields = ['uri'];
+
 
       callback = callback || fn;
 
@@ -72,7 +67,6 @@ var http = (function (self){
       }
 
 
-
       if (isWorker){
         uri = fixUri(uri);
       }
@@ -80,29 +74,30 @@ var http = (function (self){
 
       var progress = (typeof object.progress === 'function') ? object.progress : fn;
 
-
       var req = new XMLHttpRequest();
       req.addEventListener("load", function (res){
+        var now = new Date().getTime();
         callback(null, res.currentTarget.response, res);
       });
       req.addEventListener("error", function (res){
         callback(res);
       });
 
-
+      var start = new Date().getTime();
       function progressListener(stats){
+
+        var now = new Date().getTime();
+        stats.__time = (now - start);
         stats.__percentage = (stats.loaded / stats.total) * 100;
-        stats.__speed = (stats.loaded / stats.timeStamp);
+        stats.__speed = (stats.loaded /( stats.__time / 1000 ));
         progress(stats);
       }
-
 
       req.addEventListener("progress", progressListener);
 
       req.open(method.toString().toUpperCase(), fixUri(object.uri), true);
 
       if (isBinary){
-        req.responseType = "arraybuffer";
       }
       req.timeout = object.timeout || 0;
       req.ontimeout = object.ontimeout || fn;
@@ -112,9 +107,12 @@ var http = (function (self){
         req.setRequestHeader(header, value)
       }
 
-
       if ((method === 'POST'|| method === 'PUT') && object.data ){
         req.upload.onprogress = progressListener;
+      }
+      if (isBinary){
+        req.setRequestHeader('Content-Encoding', 'identity');
+        req.responseType = "arraybuffer";
       }
 
       req.send(payload);
@@ -122,6 +120,5 @@ var http = (function (self){
       return req;
     }
   }
-
   return http;
 })(this);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="speedtest">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,25 +16,97 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style media="screen">
+      body{
+        padding-top: 50px;
+      }
+    </style>
   </head>
-  <body>
+  <body ng-controller="speedtest">
+    <div class="container">
+      <button ng-click="start()" type="button" class="btn btn-default">
+        Start
+      </button>
+      <button ng-click="stop()" type="button" class="btn btn-danger">
+        Stop
+      </button>
+      <p>{{foo}}</p>
+      <div class="row">
+        <div class="col-md-4">
+          <canvas id="radar" class="chart chart-doughnut"
+            chart-colors="blue"
+            chart-data="dlStatus" chart-options="options" chart-labels="labels">
+          </canvas>
+          <h1 class="text-center">
+            Download
+          </h1>
+          <dl class="dl-horizontal">
+            <dt>Average</dt>
+            <dd>{{ overall.avg.download | speed }}</dd>
+            <dt>Max</dt>
+            <dd>{{ overall.max.download | speed }}</dd>
+            <dt>Median</dt>
+            <dd>{{ overall.median.download | speed }}</dd>
+            <dt>Min</dt>
+            <dd>{{ overall.min.download | speed }}</dd>
+          </dl>
+        </div>
+        <div class="col-md-4">
+          <canvas id="radar" class="chart chart-doughnut"
+            chart-colors="red"
+            chart-data="ulStatus" chart-options="options" chart-labels="labels">
+          </canvas>
+          <h1 class="text-center">
+            Upload
+          </h1>
+          <dl class="dl-horizontal">
+            <dt>Average</dt>
+            <dd>{{ overall.avg.upload | speed }}</dd>
+            <dt>Max</dt>
+            <dd>{{ overall.max.upload | speed }}</dd>
+            <dt>Median</dt>
+            <dd>{{ overall.median.upload | speed }}</dd>
+            <dt>Min</dt>
+            <dd>{{ overall.min.upload | speed }}</dd>
+          </dl>
+        </div>
+
+        <div class="col-md-4">
+          <canvas id="radar" class="chart chart-doughnut"
+            chart-data="latStatus" chart-options="options" chart-labels="labels">
+          </canvas>
+          <h1 class="text-center">
+            Latency
+          </h1>
+          <dl class="dl-horizontal">
+            <dt>Average</dt>
+            <dd>{{ overall.avg.latency | latency }}</dd>
+            <dt>Max</dt>
+            <dd>{{ overall.max.latency | latency }}</dd>
+            <dt>Median</dt>
+            <dd>{{ overall.median.latency | latency }}</dd>
+            <dt>Min</dt>
+            <dd>{{ overall.min.latency | latency }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <canvas id="line" class="chart chart-line" chart-data="speedChartData" chart-colors="colors"
+      chart-labels="speedChartLabels" chart-series="speedChartSeries" chart-options="speedChartOptions" >
+      </canvas
+
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.5.0/async.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/chart.js/dist/Chart.bundle.min.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
     <script src="js/http.js"></script>
-    <script src="js/worker.js"></script>
+    <script src="js/app.js"></script>
 
-    <script type="text/javascript">
-      /*http.request({
-        uri : 'http://quark.lsh.is:80/upload/',
-        method :'POST',
-        form : { key : 'FUCK YEAH'}
-      }, function (err, res){
-        console.log(err, res);
-      })*/
-    </script>
   </body>
 </html>
