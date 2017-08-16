@@ -1,0 +1,21 @@
+{
+  "name": "speedtest-light",
+  "homepage": "https://github.com/agustik/speedtest-light",
+  "authors": [
+    "Ágúst Ingi Kjartansson <agust.ingi.kjartansson@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-chart.js": "^1.1.1",
+    "async": "^2.5.0"
+  }
+}
